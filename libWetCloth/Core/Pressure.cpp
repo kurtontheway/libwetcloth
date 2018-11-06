@@ -988,10 +988,11 @@ namespace pressure
                         
                         pressure_grad /= (dx * theta);
                         
-                        scalar term = pressure_grad * dt * (node_vol_fluid_x[bucket_idx][i] + node_vol_x[bucket_idx][i] * node_mshdvm_hdvm_x[bucket_idx][i]);
+                        scalar coeff = node_vol_fluid_x[bucket_idx][i] + node_vol_x[bucket_idx][i] * node_mshdvm_hdvm_x[bucket_idx][i];
+                        scalar term = pressure_grad * dt * coeff;
                         
                         bucket_rhs_x(i) -= term;
-                        bucket_valid_x(i) = 1U;
+                        bucket_valid_x(i) = coeff > 0.;
                     }
                 }
             }
@@ -1019,10 +1020,11 @@ namespace pressure
                         
                         pressure_grad /= (dx * theta);
                         
-                        scalar term = pressure_grad * dt * (node_vol_fluid_y[bucket_idx][i] + node_vol_y[bucket_idx][i] * node_mshdvm_hdvm_y[bucket_idx][i]);
+                        scalar coeff = node_vol_fluid_y[bucket_idx][i] + node_vol_y[bucket_idx][i] * node_mshdvm_hdvm_y[bucket_idx][i];
+                        scalar term = pressure_grad * dt * coeff;
                         
                         bucket_rhs_y(i) -= term;
-                        bucket_valid_y(i) = 1U;
+                        bucket_valid_y(i) = coeff > 0.;
                     }
                 }
             }
@@ -1050,10 +1052,11 @@ namespace pressure
                         
                         pressure_grad /= (dx * theta);
                         
-                        scalar term = pressure_grad * dt * (node_vol_fluid_z[bucket_idx][i] + node_vol_z[bucket_idx][i] * node_mshdvm_hdvm_z[bucket_idx][i]);
+                        scalar coeff = node_vol_fluid_z[bucket_idx][i] + node_vol_z[bucket_idx][i] * node_mshdvm_hdvm_z[bucket_idx][i];
+                        scalar term = pressure_grad * dt * coeff;
                         
                         bucket_rhs_z(i) -= term;
-                        bucket_valid_z(i) = 1U;
+                        bucket_valid_z(i) = coeff > 0.;
                     }
                 }
             }
@@ -1396,7 +1399,7 @@ namespace pressure
 						term *= node_vol_x[bucket_idx][i] * node_inv_mdv_x[bucket_idx](i);
 						
 						bucket_rhs_x(i) -= term;
-						bucket_valid_x(i) = 1U;
+						bucket_valid_x(i) = node_vol_x[bucket_idx][i] > 0.;
 					}
 				}
 			}
@@ -1429,7 +1432,7 @@ namespace pressure
 						term *= node_vol_y[bucket_idx][i] * node_inv_mdv_y[bucket_idx](i);
 						
 						bucket_rhs_y(i) -= term;
-						bucket_valid_y(i) = 1U;
+						bucket_valid_y(i) = node_vol_y[bucket_idx][i] > 0.;
 					}
 				}
 			}
@@ -1462,7 +1465,7 @@ namespace pressure
 						term *= node_vol_z[bucket_idx][i] * node_inv_mdv_z[bucket_idx](i);
 						
 						bucket_rhs_z(i) -= term;
-						bucket_valid_z(i) = 1U;
+						bucket_valid_z(i) = node_vol_z[bucket_idx][i] > 0.;
 					}
 				}
 			}
